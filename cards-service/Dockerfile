@@ -5,7 +5,7 @@ FROM openjdk:11-jdk-slim as build
 MAINTAINER justinphan
 
 #Add the application's jar to the container
-COPY target/accounts-service-0.0.1-SNAPSHOT.jar accounts-service-0.0.1-SNAPSHOT.jar
+COPY target/cards-service-0.0.1-SNAPSHOT.jar cards-service-0.0.1-SNAPSHOT.jar
 
 #Execute the application
-ENTRYPOINT ["java","-jar","/accounts-service-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/cards-service-0.0.1-SNAPSHOT.jar"]
