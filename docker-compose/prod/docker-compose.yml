@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+
+  configserver:
+    image: justinphan/bank-app-configserver:latest
+    mem_limit: 700m
+    ports:
+      - "8071:8071"
+    networks:
+     - bankapp
+      
+  accounts:
+    image: justinphan/bank-app-accounts-service:latest
+    mem_limit: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - bankapp
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+  
+  loans:
+    image: justinphan/bank-app-loans-service:latest
+    mem_limit: 700m
+    ports:
+      - "8090:8090"
+    networks:
+      - bankapp
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+    
+  cards:
+    image: justinphan/bank-app-cards-service:latest
+    mem_limit: 700m
+    ports:
+      - "9000:9000"
+    networks:
+      - bankapp
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      
+networks:
+  bankapp:
