@@ -9,6 +9,25 @@ services:
       - "8071:8071"
     networks:
      - bankapp
+
+  eurekaserver:
+    image: justinphan/bank-app-eurekaserver:latest
+    mem_limit: 700m
+    ports:
+      - "8070:8070"
+    networks:
+     - bankapp
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 15s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
       
   accounts:
     image: justinphan/bank-app-accounts-service:latest
