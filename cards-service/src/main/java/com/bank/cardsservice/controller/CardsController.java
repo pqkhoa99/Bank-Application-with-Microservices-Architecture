@@ -5,16 +5,13 @@ import java.util.List;
 import com.bank.cardsservice.config.CardsServiceConfig;
 import com.bank.cardsservice.model.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bank.cardsservice.model.Cards;
 import com.bank.cardsservice.model.Customer;
 import com.bank.cardsservice.repository.CardsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +30,7 @@ public class CardsController {
     private CardsServiceConfig cardsConfig;
 
     @PostMapping("/myCards")
-    public List<Cards> getCardDetails(@RequestBody Customer customer) {
+    public List<Cards> getCardDetails(@RequestHeader("bank-correlation-id") String correlationid, @RequestBody Customer customer) {
         List<Cards> cards = cardsRepository.findByCustomerId(customer.getCustomerId());
         if (cards != null) {
             return cards;
