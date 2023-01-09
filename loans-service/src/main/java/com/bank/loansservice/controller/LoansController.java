@@ -1,5 +1,6 @@
 package com.bank.loansservice.controller;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.bank.loansservice.config.LoansServiceConfig;
 import com.bank.loansservice.model.Customer;
 import com.bank.loansservice.model.Loans;
@@ -16,6 +17,8 @@ import java.util.List;
 @RestController
 public class LoansController {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoansController.class);
+
     @Autowired
     private LoansRepository loansRepository;
 
@@ -24,6 +27,7 @@ public class LoansController {
 
     @PostMapping("/myLoans")
     public List<Loans> getLoansDetails(@RequestHeader("bank-correlation-id") String correlationid, @RequestBody Customer customer) {
+        logger.info("getLoansDetails() method started");
         List<Loans> loans = loansRepository.findByCustomerIdOrderByStartDtDesc(customer.getCustomerId());
         if (loans != null) {
             return loans;
